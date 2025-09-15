@@ -13,21 +13,120 @@ const cors=require("cors")
 app.use(cors())
 
 
+// import schema------------
+const Users=require("./models/Users") 
+const Product = require("./models/Product")
+
+
+
+
 // bodyparser ---------------
 const bodyParser = require("body-parser")
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({}))
 
 
+// mongoose ----------------
+const {mongoose } = require("mongoose")
+mongoose.connect("mongodb://localhost:27017/freshcart").then(()=>{
+    console.log("mongodb connect..........")
+}).catch((err)=>{
+     console.log(err)
+})
+
+
+
 // signup---------------
-app.post("/signup",(req,res)=>{
-    console.log(req.body)
+app.post("/signup",async(req,res)=>{
+    // console.log(req.body)
+    let user=req.body.formData
+    let result=await Users.insertOne({
+        firstname:user.firstname,
+        lastname:user.lastname,
+        email : user.email ,
+        password: user.password
+    })
+
+    let finaluser=await result.save()
+
+    if(finaluser){
+        res.json({
+            status:true
+        })
+    }
+    else{
+        res.json({
+            status:false
+        })
+    }
+
 }) 
 
+
+
+
+// allusers-------------------
+app.get("/allusers",async(req,res)=>{
+     let result=await Users.find({})
+     if(result){
+        res.json({
+            status:true,
+            ourusers:result
+        })
+    }
+    else{
+        res.json({
+            status:false
+        })
+    }
+})
+
+
+
+
+
+//// signin 
 app.post("/signin", (req,res)=>{
     console.log(req.body)
 })
 
+
+
+// reset
 app.post("/reset",(req,res)=>{
     console.log(req.body)
+})
+
+///add Product Data
+
+app.post("/addproduct", async(req,res)=>{
+    let product = req.body.productData
+    let result= await Product.insertOne({
+    title:product.title,
+    category:product.category,
+    weight:product.weight,
+    weightUnit:product.weightUnit,
+    image:product.image,
+    description:product.description,
+    code:product.code,
+    SKU:product.SKU,
+    status:product.status,
+    regularPrice:product.regularPrice,
+    salePrice:product.salePrice
+    })
+
+    let finalProduct = await result.save()
+
+    if(finalProduct){
+        res.json({
+            status:true,
+            "name":"fhgf"
+        })
+    }
+    else{
+        res.json({
+            status:false
+        })
+    }
+
 })
