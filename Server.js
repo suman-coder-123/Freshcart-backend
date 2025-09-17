@@ -62,9 +62,6 @@ app.post("/signup",async(req,res)=>{
 
 }) 
 
-
-
-
 // allusers-------------------
 app.get("/allusers",async(req,res)=>{
      let result=await Users.find({})
@@ -85,17 +82,42 @@ app.get("/allusers",async(req,res)=>{
 
 
 
-//// signin 
-app.post("/signin", (req,res)=>{
-    console.log(req.body)
-})
 
+//// signin 
+app.post("/signin",async(req,res)=>{
+    let ouruser=req.body.loginData
+    let result=await Users.findOne({"email":ouruser.email,"password":ouruser.password})
+    if(result){
+        res.json({
+            status:true,
+            loginuser:result
+        })
+    }
+    else{
+        res.json({
+            status:false
+        })
+    }
+})
 
 
 // reset
-app.post("/reset",(req,res)=>{
-    console.log(req.body)
-})
+app.post("/reset", async(req,res)=>{
+   let resetuser = req.body.resetData
+   let result = await Users.findOneAndUpdate({"email":resetuser.email } ,{$set:{"password":resetuser.password}})
+    if(result){
+        res.json({
+            status:true,
+            resetData:result
+        })
+    }
+    else{
+        res.json({
+            status:false
+        })
+    }
+   })
+
 
 ///add Product Data
 
