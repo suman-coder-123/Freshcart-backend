@@ -16,8 +16,8 @@ app.use(cors())
 // import schema------------
 const Users=require("./models/Users") 
 const Product = require("./models/Product")
-
-
+const Cart = require ("./models/Cart")
+const ListItem = require("./models/ListItem")
 
 
 // bodyparser ---------------
@@ -82,7 +82,6 @@ app.get("/allusers",async(req,res)=>{
 
 
 
-
 //// signin 
 app.post("/signin",async(req,res)=>{
     let ouruser=req.body.loginData
@@ -142,7 +141,6 @@ app.post("/addproduct", async(req,res)=>{
     if(finalProduct){
         res.json({
             status:true,
-            "name":"fhgf"
         })
     }
     else{
@@ -151,4 +149,189 @@ app.post("/addproduct", async(req,res)=>{
         })
     }
 
+})
+
+// ourproducts-------------------
+app.get("/products",async(req,res)=>{
+    let result= await Product.find({})
+
+    if(result){
+        res.json({
+            status:true,
+            ourproducts:result
+        })
+    }
+    else{
+        res.json({
+            status:false
+        })
+    }
+
+})
+
+
+
+
+// add cart api 
+
+app.post("/addcart", async (req, res)=>{
+    let carts = req.body.item
+    let result= await Cart.insertOne({
+    title:carts.title,
+    category:carts.category,
+    weight:carts.weight,
+    weightUnit:carts.weightUnit,
+    image:carts.image,
+    description:carts.description,
+    code:carts.code,
+    SKU:carts.SKU,
+    status:carts.status,
+    regularPrice:carts.regularPrice,
+    salePrice:carts.salePrice
+    })
+
+    let finalcart = await result.save()
+
+    if(finalcart){
+        res.json({
+            status:true,
+            
+        })
+    }
+    else{
+        res.json({
+            status:false
+        })
+    }
+
+})
+    
+
+
+
+app.get("/allcartitem",async(req,res)=>{
+        let result= await Cart.find({})
+        if(result){
+            res.json({
+                status:true,
+                cartitem:result
+            })
+        }
+
+        else{
+            res.json({
+                status:false
+            })
+        }
+})
+
+app.get("/allitems",async(req,res)=>{
+     let result=await Cart.find({})
+     if(result){
+        res.json({
+            status:true,
+            ouritem:result
+        })
+    }
+    else{
+        res.json({
+            status:false
+        })
+    }
+})
+
+
+app.post("/WishList", async (req, res)=>{
+    let WishListItem = req.body.item
+    let result= await ListItem.insertOne({
+    title:WishListItem.title,
+    category:WishListItem.category,
+    weight:WishListItem.weight,
+    weightUnit:WishListItem.weightUnit,
+    image:WishListItem.image,
+    description:WishListItem.description,
+    code:WishListItem.code,
+    SKU:WishListItem.SKU,
+    status:WishListItem.status,
+    regularPrice:WishListItem.regularPrice,
+    salePrice:WishListItem.salePrice
+    })
+
+    let finalcart = await result.save()
+
+    if(finalcart){
+        res.json({
+            status:true,
+            
+        })
+    }
+    else{
+        res.json({
+            status:false
+        })
+    }
+
+})
+
+app.get("/allListItem",async(req,res)=>{
+        let result= await ListItem.find({})
+        if(result){
+            res.json({
+                status:true,
+                listItem:result
+            })
+        }
+
+        else{
+            res.json({
+                status:false
+            })
+        }
+})
+
+app.get("/allList",async(req,res)=>{
+     let result=await ListItem.find({})
+     if(result){
+        res.json({
+            status:true,
+            ourList:result
+        })
+    }
+    else{
+        res.json({
+            status:false
+        })
+    }
+})
+
+
+// removeitem-----------------
+app.post("/removecartitem",async(req,res)=>{
+    let result= await Cart.findOneAndDelete({"_id":req.body.item._id})
+
+    if(result){
+        res.json({
+            status:true
+        })
+    }
+    else{
+        res.json({
+            status:false
+        })
+    }
+})
+
+app.post("/removeListItem",async(req,res)=>{
+    let result= await ListItem.findOneAndDelete({"_id":req.body.item._id})
+
+    if(result){
+        res.json({
+            status:true
+        })
+    }
+    else{
+        res.json({
+            status:false
+        })
+    }
 })
