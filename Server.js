@@ -28,7 +28,7 @@ app.use(bodyParser.urlencoded({}))
 
 // mongoose ----------------
 const {mongoose } = require("mongoose")
-mongoose.connect("mongodb://localhost:27017/freshcart").then(()=>{
+mongoose.connect("mongodb+srv://suman:yn4MCsjdscc4UZGN@cluster0.ojmad2k.mongodb.net/freshcart").then(()=>{
     console.log("mongodb connect..........")
 }).catch((err)=>{
      console.log(err)
@@ -334,4 +334,12 @@ app.post("/removeListItem",async(req,res)=>{
             status:false
         })
     }
+})
+
+
+
+app.post("/",(req,res)=>{
+    res.json({
+        status:true
+    })
 })
