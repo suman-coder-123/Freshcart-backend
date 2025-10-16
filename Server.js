@@ -28,7 +28,7 @@ app.use(bodyParser.urlencoded({}))
 
 // mongoose ----------------
 const {mongoose } = require("mongoose")
-mongoose.connect("mongodb+srv://suman:yn4MCsjdscc4UZGN@cluster0.ojmad2k.mongodb.net/freshcart").then(()=>{
+mongoose.connect("mongodb+srv://jatin:UxCRz1o5KdvCzx1P@cluster0.ojmad2k.mongodb.net/freshcart").then(()=>{
     console.log("mongodb connect..........")
 }).catch((err)=>{
      console.log(err)
