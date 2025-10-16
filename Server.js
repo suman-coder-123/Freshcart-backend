@@ -338,7 +338,7 @@ app.post("/removeListItem",async(req,res)=>{
 
 
 
-app.post("/",(req,res)=>{
+app.get("/",(req,res)=>{
     res.json({
         status:true
     })
